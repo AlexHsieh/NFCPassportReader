@@ -35,6 +35,15 @@ struct PassportSummaryView: View {
 struct PassportDetailsView : View {
     var passport: NFCPassportModel
     
+    var otherName: String {
+        if let otherNames = passport.otherNames,
+            let name = otherNames.first {
+            print("otherNames: \(otherNames)")
+            return name
+        }
+        return "No other name"
+    }
+    
     var body: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading) {
@@ -56,6 +65,7 @@ struct PassportDetailsView : View {
                     VStack(alignment: .leading) {
                         Text( passport.lastName)
                         Text( passport.firstName)
+                        Text( otherName)
                         Text( passport.nationality)
                         Text( passport.dateOfBirth)
                         Text( passport.gender)
