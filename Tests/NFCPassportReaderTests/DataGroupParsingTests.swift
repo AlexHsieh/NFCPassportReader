@@ -70,13 +70,13 @@ final class DataGroupParsingTests: XCTestCase {
     }
 
     func testDatagroup11Parsing() {
-        
+
         // This is a cut down version of the DG7 record. It contains everything up to the end of the image header - no actuall image data as its way too big to include here
         // I've also adjusted the record lengths accordingly
-        
+
         let dg11Val = hexRepToBin("6B305C065F0E5F2B5F115F0E0C546573743C3C5465737465725F2B0831393730313230315F110B4E6F727468616D70746F6E")
         let dgp = DataGroupParser()
-        
+
         XCTAssertNoThrow(try dgp.parseDG(data: dg11Val)) { dg in
             XCTAssertNotNil(dg)
             XCTAssertTrue( dg is DataGroup11 )
@@ -85,6 +85,22 @@ final class DataGroupParsingTests: XCTestCase {
             XCTAssertEqual(dg11.fullName, "Test<<Tester")
             XCTAssertEqual(dg11.dateOfBirth, "19701201")
             XCTAssertEqual(dg11.placeOfBirth, "Northampton")
+        }
+    }
+
+    func testDatagroup11ParsingOtherNames() {
+        let dg11Val = hexRepToBin("6b635c095f0e5f2b5f115f0fa05f0e0c546573743c3c5465737465725f2b0831393730313230315f110b4e6f727468616d70746f6e5f0f0a416c6961733c3c4f6e65a0210201025f0f0c4f746865723c3c4e616d65315f0f0c4f746865723c3c4e616d6532")
+        let dgp = DataGroupParser()
+
+        XCTAssertNoThrow(try dgp.parseDG(data: dg11Val)) { dg in
+            XCTAssertNotNil(dg)
+            XCTAssertTrue(dg is DataGroup11)
+
+            let dg11 = dg as! DataGroup11
+            XCTAssertEqual(dg11.fullName, "Test<<Tester")
+            XCTAssertEqual(dg11.dateOfBirth, "19701201")
+            XCTAssertEqual(dg11.placeOfBirth, "Northampton")
+            XCTAssertEqual(dg11.otherNames, ["Alias<<One", "Other<<Name1", "Other<<Name2"])
         }
     }
 
